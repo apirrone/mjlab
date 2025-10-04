@@ -33,8 +33,10 @@ class OpenDuckMiniV2RoughEnvCfg(LocomotionVelocityEnvCfg):
         reduce="netforce",
       ),
     ]
-    g1_cfg = replace(OPEN_DUCK_MINI_V2_ROBOT_CFG, sensors=tuple(foot_contact_sensors))
-    self.scene.entities = {"robot": g1_cfg}
+    open_duck_mini_v2_cfg = replace(
+      OPEN_DUCK_MINI_V2_ROBOT_CFG, sensors=tuple(foot_contact_sensors)
+    )
+    self.scene.entities = {"robot": open_duck_mini_v2_cfg}
 
     sensor_names = ["left_foot_ground_contact", "right_foot_ground_contact"]
     geom_names = ["left_foot_bottom_tpu", "right_foot_bottom_tpu"]
@@ -44,13 +46,8 @@ class OpenDuckMiniV2RoughEnvCfg(LocomotionVelocityEnvCfg):
     self.actions.joint_pos.scale = OPEN_DUCK_MINI_V2_ACTION_SCALE
 
     self.rewards.air_time.params["sensor_names"] = sensor_names
-    # self.rewards.pose.params["std"] = {
-    #   r"^(left|right)_knee_joint$": 0.6,
-    #   r"^(left|right)_hip_pitch_joint$": 0.6,
-    #   r"^(left|right)_elbow_joint$": 0.6,
-    #   r"^(left|right)_shoulder_pitch_joint$": 0.6,
-    #   r"^(?!.*(knee_joint|hip_pitch|elbow_joint|shoulder_pitch)).*$": 0.3,
-    # }
+    self.rewards.action_rate_l2.weight = -1.0
+
     self.rewards.pose.params["std"] = {
       # Lower body.
       r".*hip_pitch.*": 0.3,
@@ -67,6 +64,7 @@ class OpenDuckMiniV2RoughEnvCfg(LocomotionVelocityEnvCfg):
     self.commands.twist.viz.z_offset = 0.75
 
     self.curriculum.command_vel = None
+    # self.observations
 
 
 @dataclass
