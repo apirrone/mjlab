@@ -253,8 +253,8 @@ class RewardCfg:
     weight=1.0,
     params={
       "asset_name": "robot",
-      "threshold_min": 0.05,
-      "threshold_max": 0.15,
+      "threshold_min": 0.1,
+      "threshold_max": 0.3,
       "command_name": "twist",
       "command_threshold": 0.05,
       "sensor_names": [],
