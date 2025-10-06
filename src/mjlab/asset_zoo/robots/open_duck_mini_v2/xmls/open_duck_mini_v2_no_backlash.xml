@@ -45,8 +45,8 @@
     <default class="sts3215">
       <geom contype="0" conaffinity="0"/>
       <joint damping="0.56" frictionloss="0.068" armature="0.027"/>
-      <!-- <position kp="17.12" kv="0.0" forcerange="-3.23 3.23"/> -->
-      <position kp="13.37" kv="0.0" forcerange="-3.23 3.23"/>
+      <position kp="17.12" kv="0.0" forcerange="-3.23 3.23"/>
+      <!-- <position kp="13.37" kv="0.0" forcerange="-3.23 3.23"/> -->
     </default>
     <default class="backlash">
       <!-- +/- 0.5° of backlash -->

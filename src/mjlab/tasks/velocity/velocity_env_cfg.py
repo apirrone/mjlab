@@ -132,6 +132,54 @@ class ObservationCfg:
 
 
 @dataclass
+class ObservationNoLinVelCfg:
+  @dataclass
+  class PolicyCfg(ObsGroup):
+    # base_lin_vel: ObsTerm = term(
+    #   ObsTerm,
+    #   func=mdp.base_lin_vel,
+    #   noise=Unoise(n_min=-0.1, n_max=0.1),
+    # )
+    base_ang_vel: ObsTerm = term(
+      ObsTerm,
+      func=mdp.base_ang_vel,
+      noise=Unoise(n_min=-0.2, n_max=0.2),
+    )
+    projected_gravity: ObsTerm = term(
+      ObsTerm,
+      func=mdp.projected_gravity,
+      noise=Unoise(n_min=-0.05, n_max=0.05),
+    )
+    joint_pos: ObsTerm = term(
+      ObsTerm,
+      func=mdp.joint_pos_rel,
+      noise=Unoise(n_min=-0.01, n_max=0.01),
+    )
+    joint_vel: ObsTerm = term(
+      ObsTerm,
+      func=mdp.joint_vel_rel,
+      noise=Unoise(n_min=-1.5, n_max=1.5),
+    )
+
+    actions: ObsTerm = term(ObsTerm, func=mdp.last_action)
+    command: ObsTerm = term(
+      ObsTerm, func=mdp.generated_commands, params={"command_name": "twist"}
+    )
+
+    def __post_init__(self):
+      self.enable_corruption = True
+
+  @dataclass
+  class PrivilegedCfg(PolicyCfg):
+    def __post_init__(self):
+      super().__post_init__()
+      self.enable_corruption = False
+
+  policy: PolicyCfg = field(default_factory=PolicyCfg)
+  critic: PrivilegedCfg = field(default_factory=PrivilegedCfg)
+
+
+@dataclass
 class EventCfg:
   reset_base: EventTerm = term(
     EventTerm,
@@ -214,6 +262,15 @@ class RewardCfg:
     },
   )
 
+  # imitation: RewardTerm = term(
+  #   RewardTerm,
+  #   func=mdp.imitation,
+  #   weight=1.0,
+  #   params={
+  #     "poly_reference_motion": None,  # Override in robot cfg.
+  #   },
+  # )
+
 
 @dataclass
 class TerminationCfg:
@@ -260,6 +317,28 @@ SIM_CFG = SimulationCfg(
 class LocomotionVelocityEnvCfg(ManagerBasedRlEnvCfg):
   scene: SceneCfg = field(default_factory=lambda: SCENE_CFG)
   observations: ObservationCfg = field(default_factory=ObservationCfg)
+  actions: ActionCfg = field(default_factory=ActionCfg)
+  rewards: RewardCfg = field(default_factory=RewardCfg)
+  events: EventCfg = field(default_factory=EventCfg)
+  terminations: TerminationCfg = field(default_factory=TerminationCfg)
+  commands: CommandsCfg = field(default_factory=CommandsCfg)
+  curriculum: CurriculumCfg = field(default_factory=CurriculumCfg)
+  sim: SimulationCfg = field(default_factory=lambda: SIM_CFG)
+  viewer: ViewerConfig = field(default_factory=lambda: VIEWER_CONFIG)
+  decimation: int = 4  # 50 Hz control frequency.
+  episode_length_s: float = 20.0
+
+  def __post_init__(self):
+    # Enable curriculum mode for terrain generator.
+    if self.scene.terrain is not None:
+      if self.scene.terrain.terrain_generator is not None:
+        self.scene.terrain.terrain_generator.curriculum = True
+
+
+@dataclass
+class LocomotionNoLinVelVelocityEnvCfg(ManagerBasedRlEnvCfg):
+  scene: SceneCfg = field(default_factory=lambda: SCENE_CFG)
+  observations: ObservationNoLinVelCfg = field(default_factory=ObservationNoLinVelCfg)
   actions: ActionCfg = field(default_factory=ActionCfg)
   rewards: RewardCfg = field(default_factory=RewardCfg)
   events: EventCfg = field(default_factory=EventCfg)

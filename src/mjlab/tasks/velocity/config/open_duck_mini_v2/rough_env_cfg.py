@@ -1,17 +1,20 @@
+import math
 from dataclasses import dataclass, replace
 
 from mjlab.asset_zoo.robots.open_duck_mini_v2.open_duck_mini_v2_constants import (
   OPEN_DUCK_MINI_V2_ACTION_SCALE,
   OPEN_DUCK_MINI_V2_ROBOT_CFG,
 )
-from mjlab.tasks.velocity.velocity_env_cfg import (
-  LocomotionVelocityEnvCfg,
+from mjlab.tasks.velocity import mdp
+from mjlab.tasks.velocity.config.open_duck_mini_v2.poly_reference_motion import (
+  PolyReferenceMotion,
 )
+from mjlab.tasks.velocity.velocity_env_cfg import LocomotionNoLinVelVelocityEnvCfg
 from mjlab.utils.spec_config import ContactSensorCfg
 
 
 @dataclass
-class OpenDuckMiniV2RoughEnvCfg(LocomotionVelocityEnvCfg):
+class OpenDuckMiniV2RoughEnvCfg(LocomotionNoLinVelVelocityEnvCfg):
   def __post_init__(self):
     super().__post_init__()
 
@@ -46,8 +49,9 @@ class OpenDuckMiniV2RoughEnvCfg(LocomotionVelocityEnvCfg):
     self.actions.joint_pos.scale = OPEN_DUCK_MINI_V2_ACTION_SCALE
 
     self.rewards.air_time.params["sensor_names"] = sensor_names
-    self.rewards.action_rate_l2.weight = -1.0
+    self.rewards.action_rate_l2.weight = -0.2
 
+    # TODO tune
     self.rewards.pose.params["std"] = {
       # Lower body.
       r".*hip_pitch.*": 0.3,
@@ -62,9 +66,16 @@ class OpenDuckMiniV2RoughEnvCfg(LocomotionVelocityEnvCfg):
 
     self.viewer.body_name = "base"
     self.commands.twist.viz.z_offset = 0.75
+    # self.commands.twist.ranges = mdp.UniformVelocityCommandCfg.Ranges(
+    #   lin_vel_x=(-0.2, 0.2),
+    #   lin_vel_y=(-0.2, 0.2),
+    #   ang_vel_z=(-1.0, 1.0),
+    #   heading=(-math.pi, math.pi),
+    # )
 
     self.curriculum.command_vel = None
-    # self.observations
+
+    # self.PRM = PolyReferenceMotion("/home/antoine/MISC/mjlab/src/mjlab/tasks/velocity/config/open_duck_mini_v2/polynomial_coefficients.pkl")
 
 
 @dataclass

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from distutils import cmd
 from typing import TYPE_CHECKING
 
 import torch
@@ -7,6 +8,9 @@ import torch
 from mjlab.entity import Entity
 from mjlab.managers.manager_term_config import RewardTermCfg
 from mjlab.managers.scene_entity_config import SceneEntityCfg
+from mjlab.tasks.velocity.config.open_duck_mini_v2.poly_reference_motion import (
+  PolyReferenceMotion,
+)
 
 if TYPE_CHECKING:
   from mjlab.envs import ManagerBasedRlEnv
@@ -185,3 +189,14 @@ def feet_slide(
   contacts = torch.stack(contact_list, dim=1)
   geom_vel = asset.data.geom_lin_vel_w[:, asset_cfg.geom_ids, :2]
   return torch.sum(geom_vel.norm(dim=-1) * contacts, dim=1)
+
+
+class Imitation:
+  def __init__(self, cfg: RewardTermCfg, env: ManagerBasedRlEnv):
+    self.PRM = cfg.params["PRM"]
+    self.i = 0
+
+  def __call__(self, env: ManagerBasedRlEnv, **kwargs) -> torch.Tensor:
+    self.i += 1
+    self.i = self.i % self.PRM.nb_steps_in_period
+    pass
