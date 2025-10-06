@@ -49,7 +49,7 @@ class OpenDuckMiniV2RoughEnvCfg(LocomotionNoLinVelVelocityEnvCfg):
     self.actions.joint_pos.scale = OPEN_DUCK_MINI_V2_ACTION_SCALE
 
     self.rewards.air_time.params["sensor_names"] = sensor_names
-    self.rewards.action_rate_l2.weight = -0.2
+    self.rewards.action_rate_l2.weight = -0.5
 
     # TODO tune
     self.rewards.pose.params["std"] = {
@@ -66,12 +66,12 @@ class OpenDuckMiniV2RoughEnvCfg(LocomotionNoLinVelVelocityEnvCfg):
 
     self.viewer.body_name = "base"
     self.commands.twist.viz.z_offset = 0.75
-    # self.commands.twist.ranges = mdp.UniformVelocityCommandCfg.Ranges(
-    #   lin_vel_x=(-0.2, 0.2),
-    #   lin_vel_y=(-0.2, 0.2),
-    #   ang_vel_z=(-1.0, 1.0),
-    #   heading=(-math.pi, math.pi),
-    # )
+    self.commands.twist.ranges = mdp.UniformVelocityCommandCfg.Ranges(
+      lin_vel_x=(-0.2, 0.2),
+      lin_vel_y=(-0.2, 0.2),
+      ang_vel_z=(-1.0, 1.0),
+      heading=(-math.pi, math.pi),
+    )
 
     self.curriculum.command_vel = None
 
