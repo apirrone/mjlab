@@ -49,7 +49,7 @@ class OpenDuckMiniV2RoughEnvCfg(LocomotionNoLinVelVelocityEnvCfg):
     self.actions.joint_pos.scale = OPEN_DUCK_MINI_V2_ACTION_SCALE
 
     self.rewards.air_time.params["sensor_names"] = sensor_names
-    self.rewards.action_rate_l2.weight = -0.5
+    self.rewards.action_rate_l2.weight = -1.0
 
     # TODO tune
     self.rewards.pose.params["std"] = {
@@ -74,8 +74,6 @@ class OpenDuckMiniV2RoughEnvCfg(LocomotionNoLinVelVelocityEnvCfg):
     )
 
     self.curriculum.command_vel = None
-
-    # self.PRM = PolyReferenceMotion("/home/antoine/MISC/mjlab/src/mjlab/tasks/velocity/config/open_duck_mini_v2/polynomial_coefficients.pkl")
 
 
 @dataclass

@@ -253,8 +253,8 @@ class RewardCfg:
     weight=1.0,
     params={
       "asset_name": "robot",
-      "threshold_min": 0.1,
-      "threshold_max": 0.3,
+      "threshold_min": 0.2,
+      "threshold_max": 0.4,
       "command_name": "twist",
       "command_threshold": 0.05,
       "sensor_names": [],
@@ -266,9 +266,7 @@ class RewardCfg:
   #   RewardTerm,
   #   func=mdp.imitation,
   #   weight=1.0,
-  #   params={
-  #     "poly_reference_motion": None,  # Override in robot cfg.
-  #   },
+  #   params={"command_name": "twist"},
   # )
 
 
