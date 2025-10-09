@@ -49,7 +49,7 @@ class OpenDuckMiniV2RoughEnvCfg(LocomotionNoLinVelVelocityEnvCfg):
     self.actions.joint_pos.scale = OPEN_DUCK_MINI_V2_ACTION_SCALE
 
     self.rewards.air_time.params["sensor_names"] = sensor_names
-    self.rewards.action_rate_l2.weight = -1.0
+    self.rewards.action_rate_l2.weight = -0.5
 
     # TODO tune
     self.rewards.pose.params["std"] = {
