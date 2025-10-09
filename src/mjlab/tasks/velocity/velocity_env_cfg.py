@@ -320,6 +320,18 @@ class RewardCfg:
     },
   )
 
+  flat_orientation: RewardTerm = term(
+    RewardTerm,
+    func=mdp.flat_orientation_l2,
+    weight=-0.5
+  )
+
+  joint_torques_l2: RewardTerm = term(
+    RewardTerm,
+    func=mdp.joint_torques_l2,
+    weight=-1e-5,
+  )
+
   # imitation: RewardTerm = term(
   #   RewardTerm,
   #   func=mdp.imitation,
