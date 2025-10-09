@@ -9,12 +9,12 @@ from mjlab.tasks.velocity import mdp
 from mjlab.tasks.velocity.config.open_duck_mini_v2.poly_reference_motion import (
   PolyReferenceMotion,
 )
-from mjlab.tasks.velocity.velocity_env_cfg import LocomotionNoLinVelVelocityEnvCfg
+from mjlab.tasks.velocity.velocity_env_cfg import LocomotionNoLinVelVelocityEnvCfg, LocomotionIMUVelocityEnvCfg
 from mjlab.utils.spec_config import ContactSensorCfg
 
 
 @dataclass
-class OpenDuckMiniV2RoughEnvCfg(LocomotionNoLinVelVelocityEnvCfg):
+class OpenDuckMiniV2RoughEnvCfg(LocomotionIMUVelocityEnvCfg):
   def __post_init__(self):
     super().__post_init__()
 

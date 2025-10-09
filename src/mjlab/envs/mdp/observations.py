@@ -90,3 +90,15 @@ def generated_commands(env: ManagerBasedRlEnv, command_name: str) -> torch.Tenso
   command = env.command_manager.get_command(command_name)
   assert command is not None
   return command
+
+##
+# IMU
+##
+
+def imu_accelerometer(env: ManagerBasedEnv, asset_cfg: SceneEntityCfg = _DEFAULT_ASSET_CFG) -> torch.Tensor:
+  asset: Entity = env.scene[asset_cfg.name]
+  return asset.data.sensor_data["accelerometer"]
+
+def imu_gyroscope(env: ManagerBasedEnv, asset_cfg: SceneEntityCfg = _DEFAULT_ASSET_CFG) -> torch.Tensor:
+  asset: Entity = env.scene[asset_cfg.name]
+  return asset.data.sensor_data["gyro"]
