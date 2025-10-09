@@ -67,8 +67,8 @@ class OpenDuckMiniV2RoughEnvCfg(LocomotionNoLinVelVelocityEnvCfg):
     self.viewer.body_name = "base"
     self.commands.twist.viz.z_offset = 0.75
     self.commands.twist.ranges = mdp.UniformVelocityCommandCfg.Ranges(
-      lin_vel_x=(-0.2, 0.2),
-      lin_vel_y=(-0.2, 0.2),
+      lin_vel_x=(-0.5, 0.5),
+      lin_vel_y=(-0.5, 0.5),
       ang_vel_z=(-1.0, 1.0),
       heading=(-math.pi, math.pi),
     )
